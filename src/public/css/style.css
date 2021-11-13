@@ -1,0 +1,289 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #eee;
+}
+
+.btn:focus, .btn:active{
+    outline: none !important;
+    box-shadow: none;
+}
+.btn{
+    border: none;
+}
+
+/**Signup signin form*/
+.loginSignupContainer {
+    max-width: 380px;
+    margin: 80px auto;
+    background-color: #fff;
+    padding: 15px 40px 50px;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    position: relative;
+    height: 450px;
+    overflow: hidden;
+}
+
+.loginSignupContainer  .button-toggle-group{
+    display: flex;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.loginSignupContainer .button-toggle-group .btn{
+    width: 50%;
+    font-size: 1vmax;
+    font-weight: 500;
+    color: #666;
+}
+
+
+.loginSignupContainer .btn-toggle{
+    background-color: #eb4034;
+    height: 3px;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 2px;
+    transition: all 0.5s;
+}
+
+.form-signin{
+   position: absolute;
+   left: 50px;
+   top: 120px;
+   width: 280px;
+   transition: all 0.5s;
+}
+
+.form-signup{
+    position: absolute;
+    left: 450px;
+    top: 120px;
+    width: 280px;
+    transition: all 0.5s;
+}
+
+.form-signin .btn-primary,
+.form-signup .btn-primary{
+    background: #eb4034;
+}
+
+/**Home page*/
+.menu-icon{
+    color: #eb4034;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    cursor: pointer;
+}
+.banner{
+    background-image: url("../images/nikolay-tarashchenko-u76CN5rZeOU-unsplash.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vmin;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    color: white;
+}
+
+.banner > h1{
+    margin: 5vmax;
+    text-transform: uppercase;
+}
+
+.banner > p {
+    font-size: 1.4vmax;
+}
+
+.banner > a > button{
+    margin-bottom: 5vmax;
+    padding: 1vmax;
+    transition: all 0.5s;
+    font-weight: 500;
+}
+
+.banner > a > button:hover{
+    background-color: transparent;
+    color: white;
+}
+
+
+/**Header*/
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow: hidden;
+}
+
+header > .close-icon{
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+header > .close-icon:hover{
+    color: #eb4034;
+}
+
+header > .nav > li > a > h1{
+    margin-right: 150px;
+    color: #eb4034;
+}
+
+header > .nav > li > a{
+    color: #333;
+    font-weight: 400;
+    font-size: 1.4vmax;
+    transition: all 0.5s;
+}
+
+header > .nav > li > a:hover{
+    color: #eb4034;
+    transform: scale(1.1);
+}
+
+header .nav .bi{
+    font-size: xx-large;
+}
+
+.homeHeading{
+    text-align: center;
+    font-size: 1.4vmax;
+    border-bottom: 1px solid rgba(21, 21, 21, 0.5);
+    padding: 1vmax;
+    margin: 5vmax auto;
+    width: 20vmax;
+}
+
+/**Footer*/
+footer{
+    max-width: 100%;
+    padding: 2vmax;
+    background-color: rgb(34,33,33);
+    color: white;
+    margin-left: 0 !important;
+}
+
+.left-footer,.middle-footer, .rigth-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.middle-footer > h1{
+    font-size: 4vmax;
+    color: #eb4034;
+    text-transform: uppercase;
+}
+
+.rigth-footer > a{
+    text-decoration: none;
+    color: white;
+    transition: all 0.5s;
+}
+.rigth-footer > a:hover{
+    color: #eb4034;
+}
+
+
+/**Bubble*/
+.wrapper-bubble{
+    z-index: 10000;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 100;
+    height: 60px;
+}
+
+.bubble{
+    width: 60px;
+    height: 60px;
+    margin: auto;
+    cursor: pointer;
+    color: #555;
+    box-shadow: 0 0 10px 9px #0c0c0c1f;
+}
+
+.wrapper-bubble:hover{
+    height: auto;
+}
+
+.wrapper-bubble:hover .bubble-sm{
+    transform: scale(1);
+}x
+
+
+.wrapper-bubble:hover + .wrapper-cover{
+    display: block;
+}
+
+.bubble-sm{
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    transform: scale(0);
+    transition: all 0.5s;
+}
+
+.bubble-sm a{
+    color: #555;
+}
+
+.bubble-sm a:hover{
+    color: #eb4034;
+}
+
+.bubble,.bubble-sm{
+    border-radius: 50%;
+    margin-bottom: 20px;
+    background-color: white;
+    overflow: hidden;
+}
+
+.bubble img{
+    width: 100%;
+}
+
+.bubble-sm h4{
+    text-align: center;
+    line-height: 40px;
+}
+
+.wrapper-cover{
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    display: none;
+}
+
