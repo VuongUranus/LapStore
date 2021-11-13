@@ -21,7 +21,13 @@ router.route('/register').post(registerUser);
 router.route('/login')
 .get((req,res)=>{
 
-    res.render("user/authenticate/login.ejs");
+    const {token} = req.cookies;
+
+    if(token){
+        return res.redirect('/');
+    }
+    
+    res.render("user/authenticate/login.ejs",{message:req.flash('loginMessage')});
 
 })
 .post(loginUser);

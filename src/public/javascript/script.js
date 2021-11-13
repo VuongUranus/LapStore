@@ -22,4 +22,14 @@ $(document).ready(()=>{
         $(".form-signin").css("left","-400px");
         $(".form-signup").css("left","50px")
     });
+
+    //Show bubble and change link user-profile
+    $.post("/checkLogin",(data)=>{
+        if(!data){
+            $(".wrapper-bubble").css("display","none");
+        }else{
+            $("header .nav li:last-child a").attr("href","#");
+        }
+    })
+
 });
