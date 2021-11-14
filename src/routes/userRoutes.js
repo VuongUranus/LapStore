@@ -26,8 +26,8 @@ router.route('/login')
     if(token){
         return res.redirect('/');
     }
-    
-    res.render("user/authenticate/login.ejs",{message:req.flash('loginMessage')});
+    const message = req.flash('loginMessage');
+    res.render("user/authenticate/login.ejs",{message:message});
 
 })
 .post(loginUser);
@@ -38,6 +38,10 @@ router.route('/me')
 .get(isAuthenticationUser,getUserDetails)
 
 router.route("/password/update")
+.get(isAuthenticationUser,(req,res)=>{
+    const message = req.flash('updatePasswordMessage');
+    res.render('user/user/updatePassword',{message:message});
+})
 .put(isAuthenticationUser,updatePassword)
 
 router.route('/me/update')

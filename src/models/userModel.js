@@ -26,7 +26,11 @@ const userSchema = new mongoose.Schema({
     role:{
         type: String,
         default: "user"
-    }
+    },
+    createAt:{
+        type: Date,
+        default: Date.now,
+    },
 });
 
 userSchema.pre("save",async function(next){

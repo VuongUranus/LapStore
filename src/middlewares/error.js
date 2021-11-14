@@ -5,18 +5,7 @@ module.exports = (err,req,res,next) => {
     err.message = err.message || "Internal Server Error";
     err.flashName = err.flashName || "homeMessage";
 
-    //Wrong Mongodb Id error
-    if(err.name === "CastError"){
-        const message = `Resource not found. Invalid: ${err.path}`;
-        err = new ErrorHander(message);
-    }
-
-    //Mongoose dupicate key error
-    if(err.code === 11000){
-        const message = `Duplicate ${Object.keys(err.keyValue)} Entered`;
-        err = new ErrorHander(message);
-    }
-    console.log(err.message);
+    console.log(err.name);
     req.flash(err.flashName,err.message);
     res.redirect(err.redirect);
 }

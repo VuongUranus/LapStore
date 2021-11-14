@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const ErrorHander = require('../utils/errorHander');
 const sendToken = require('../utils/jwtToken');
+const typeErrors = require('../utils/typeErrors');
 
 //Register a User
 exports.registerUser =  async (req,res,next)=>{
@@ -13,7 +14,8 @@ exports.registerUser =  async (req,res,next)=>{
         
         sendToken(user,'/',res);
     }catch(error){
-        return next(new ErrorHander(error.message,"/login",'loginMessage'));
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,"/login",'loginMessage'));
     }
 };
 
@@ -42,7 +44,8 @@ exports.loginUser = async(req,res,next)=>{
 
         sendToken(user,'/',res);
     }catch(error){
-        return next(new ErrorHander(error.message,"/login","loginMessage"));
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,"/login","loginMessage"));
     }
 
 };
@@ -57,7 +60,7 @@ exports.logout = async (req,res,next)=>{
             httpOnly: true,
         });
     
-        res.redirect('/'); 
+        res.redirect('/login'); 
     
     } catch (error) {
         next(new ErrorHander(error.message));
@@ -70,9 +73,11 @@ exports.getUserDetails = async(req,res,next)=>{
     try {
         const user = await User.findById(req.user.id);
 
-        res.render("user/user/profile",{message:req.flash('profileMessage'),user});
+        const message = req.flash('profileMessage');
+        res.render("user/user/profile",{message:message,user});
     } catch (error) {
-        next(new ErrorHander(error.message,'/me','profileMessage'));
+        const message = typeErrors(error);
+        next(new ErrorHander(message,'/me','profileMessage'));
     }
 
 
@@ -88,21 +93,29 @@ exports.updatePassword = async (req,res,next)=>{
         const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
         
         if(!isPasswordMatched){
-            return next(new ErrorHander("Old password is incorrect",400));
+            return next(new ErrorHander("Old password is incorrect","/password/update","updatePasswordMessage"));
+        }
+
+        const compareNewPassword = await user.comparePassword(req.body.newPassword);
+        if(compareNewPassword){
+            return next(new ErrorHander("You typed the old password please make a new one",'/password/update','updatePasswordMessage'));
         }
     
         if(req.body.newPassword !== req.body.confirmPassword){
-            return next(new ErrorHander("Password does not match",400));
+            return next(new ErrorHander("Password does not match","/password/update","updatePasswordMessage"));
         }
     
         user.password = req.body.newPassword;
     
         await user.save();
+
+        req.flash('profileMessage','Update Password Successfully.');
     
-        sendToken(user,200,res);
+        sendToken(user,'/me',res);
 
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message,'/password/update','updatePasswordMessage'));
     }
 
 };
@@ -111,6 +124,12 @@ exports.updatePassword = async (req,res,next)=>{
 exports.updateProfile = async(req,res,next)=>{
 
     try {
+
+        const userCheck = await User.findById(req.user);
+
+        if(req.body.name === userCheck.name && req.body.email === userCheck.email){
+            return next(new ErrorHander('The new infomation can\'t be the same with the old one','/me','profileMessage'));
+        }
 
         const newUserData = {
             name: req.body.name,
@@ -122,14 +141,13 @@ exports.updateProfile = async(req,res,next)=>{
             runValidators:true,
             useFindAndModify: false,
         });
-    
-        res.status(200).json({
-            success:true,
-            user
-        });
+
+        req.flash('profileMessage','Update Successfully!');
+        res.redirect('/me');
         
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message,'/me','profileMessage'));
     }
 
 };
@@ -147,7 +165,8 @@ exports.getAllUser = async (req,res,next)=>{
         });
 
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message));
     }
 
 };
@@ -169,7 +188,8 @@ exports.getSingleUser =  async (req,res,next)=>{
         });
 
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message));
     }
 
 };
@@ -197,7 +217,8 @@ exports.updateUser = async(req,res,next)=>{
         });
 
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message));
     }
 
 };
@@ -221,7 +242,8 @@ exports.deleteUser = async (req,res,next)=>{
         })
 
     } catch (error) {
-        next(new ErrorHander(error.message));
+        const message = typeErrors(error);
+        next(new ErrorHander(message));
     }
 
 };

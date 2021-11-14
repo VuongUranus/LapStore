@@ -25,11 +25,14 @@ $(document).ready(()=>{
 
     //Show bubble and change link user-profile
     $.post("/checkLogin",(data)=>{
-        if(!data){
-            $(".wrapper-bubble").css("display","none");
-        }else{
-            $("header .nav li:last-child a").attr("href","#");
+        if(data){
+            $(".wrapper-bubble").css("display","block");
+            $("header .nav li:last-child a").attr("href","/me");
         }
-    })
+    });
 
+    //Message effect
+    setTimeout(()=>{
+        $(".message-wrapper").css("transform","scale(0)");
+    },5000);
 });

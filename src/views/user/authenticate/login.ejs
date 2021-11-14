@@ -15,7 +15,7 @@
             <span class="btn-toggle"></span>
         </div>
         <form action="/login" method="post" class="form-signin">
-            <input type="text" class="form-control p-3 mb-4" name="email" placeholder="Email Address" required>
+            <input type="email" class="form-control p-3 mb-4" name="email" placeholder="Email Address" required>
             <input type="password" class="form-control p-3 mb-4" name="password" placeholder="Password" part="Password" required>
             <a href="#" class="btn btn-md btn-link mb-4 btn-block">Forget password?</a>
             <button type="submit" class="btn btn-md btn-primary btn-block">Log In</button>
@@ -27,6 +27,8 @@
             <button type="submit" class="btn btn-md btn-primary btn-block mb-4">Register</button>
         </form>
     </div>
+
+    <%- include ("../../partials/message.ejs")  %>
 
     <!-- <%- include ("../../partials/footer.ejs") %> -->
 

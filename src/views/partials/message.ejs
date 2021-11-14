@@ -1,0 +1,10 @@
+<% if(message.length > 0){ %>
+
+    <div class="message-wrapper alert alert-warning alert-dismissible fade show" role="alert">
+        <h3><i class="bi bi-chat-left-dots-fill"></i></h3>
+        <h5> <%= message %> </h5>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <p aria-hidden="true">&times;</p>
+        </button>
+    </div>
+<% } %>

@@ -14,9 +14,30 @@
 
     <div class="wrapper-profile">
 
-        
+        <form method="post" action="/me/update?_method=PUT">
+            <h3> My Profile</h3>
+            <div>
+                <h4>Full Name</h4>
+                <input class="form-control" type="text" name="name" placeholder="Full name" value="<%= user.name %>" required>
+            </div>
+            <div>
+                <h4>Email</h4>
+                <input class="form-control" type="email" name="email" placeholder="Email" value="<%= user.email %>" required>
+            </div>
+            <div>
+                <h4>Joined On</h4>
+                <p><%=user.createAt%></p>
+            </div>
+            
+            <div>
+                <button type="submit" class="btn btn-sm">Change</button>
+                <a href="/password/update" class="btn btn-sm">Change Password</a>
+            </div>
+        </form>
 
     </div>
+
+    <%- include ("../../partials/message.ejs")  %>
 
 </body>
 </html>
