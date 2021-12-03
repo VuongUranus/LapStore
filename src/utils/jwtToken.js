@@ -11,11 +11,6 @@ const sendToken = (user,redirect,res)=>{
         httpOnly: true,
 
     }
-    // res.status(statusCode).cookie('token',token,options).json({
-    //     success:true,
-    //     user,
-    //     token
-    // });
     res.cookie('token',token,options).redirect(redirect);
 }
 

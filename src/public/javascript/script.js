@@ -35,4 +35,11 @@ $(document).ready(()=>{
     setTimeout(()=>{
         $(".message-wrapper").css("transform","scale(0)");
     },5000);
+
+    //Scroll to
+    $("p button.scroll").click(()=>{
+        $('html,body').animate({scrollTop: $(".homeHeading").offset().top},500);
+    });
+
+
 });

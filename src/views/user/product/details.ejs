@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Product Details</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+
+    <div class="wrapper-detail">
+        <div class="info-product row">
+            <div class="col-5">
+                <div class="image">
+                    <img src=<%= product.images[0].url %> alt="">
+                    <!-- <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt=""> -->
+                </div>
+            </div>
+            <div class="col-7 details">
+                <h3><%= product.name %></h3>
+                <hr>
+                <div class="rating">
+                    <%
+                    var ratings = product.ratings 
+                    for(var i=1;i<=5;i++){
+                        if(ratings-1 >= 0){%>
+                            <i class="bi bi-star-fill"></i>
+                        <% ratings-- 
+                        }
+                        else if(ratings - 1 < 0 && ratings - 1 > -1 ){%>
+                            <i class="bi bi-star-half"></i>
+                        <%
+                        ratings = Math.floor(ratings)
+                        }
+                        else{%>
+                            <i class="bi bi-star"></i>
+                        <%}
+                    } %>
+                </div>
+                <span>(<%= product.numOfReviews %> review)</span>
+                <hr>
+                <h4><%= product.price %>đ</h4>
+                <form action="/cart" method="post">
+                    <input type="number" name="quantity" class="quantity" value="1" min="1" max="<%= product.Stock %>">
+                    <input type="hidden" name="product" value="<%= product._id %>">
+                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                </form>
+                <hr>
+                <p>Status: <strong>
+                    <% if(product.Stock > 9){%>
+                        InStock
+                    <%}else if(product.Stock > 0 && product.Stock < 10){%>
+                        Only <%= product.Stock %> product left
+                    <%}else{%>
+                        OutOfStock
+                    <%} %>
+                </strong> </p>
+                <hr>
+                <h5>Description</h5>
+                <p><%= product.description %></p>
+            </div>
+        </div>
+        <div class="reviews">
+            <h2 class="homeHeading">Product Reviews</h2>
+            <h3><%= product.ratings%><em>/5</em></h3>
+            <div class="rating">
+                <%
+                var ratings = product.ratings 
+                for(var i=1;i<=5;i++){
+                    if(ratings-1 >= 0){%>
+                        <i class="bi bi-star-fill"></i>
+                    <% ratings-- 
+                    }
+                    else if(ratings - 1 < 0 && ratings - 1 > -1 ){%>
+                        <i class="bi bi-star-half"></i>
+                    <%
+                    ratings = Math.floor(ratings)
+                    }
+                    else{%>
+                        <i class="bi bi-star"></i>
+                    <%}
+                } %>
+            </div>
+            <hr>
+            <% product.reviews.forEach(function(p){%>
+                <div class="productReviews">
+                    <h6>by: <%= p.name %></h6>
+                    <div class="rating">
+                        <%
+                        var rating = p.rating 
+                        for(var i=1;i<=5;i++){
+                            if(rating-1 >= 0){%>
+                                <i class="bi bi-star-fill"></i>
+                            <% rating-- 
+                            }
+                            else if(rating - 1 < 0 && rating - 1 > -1 ){%>
+                                <i class="bi bi-star-half"></i>
+                            <%
+                            rating = Math.floor(rating)
+                            }
+                            else{%>
+                                <i class="bi bi-star"></i>
+                            <%}
+                        } %>
+                    </div>
+                    <p><%= p.comment %></p>
+                    <hr>
+            </div>
+            <%})%>
+        </div>
+        
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

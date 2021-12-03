@@ -29,12 +29,12 @@ app.use(flash());
 
 //Route Import
 const user = require('./routes/userRoutes');
+const product = require('./routes/productRoutes');
 
 app.get('/',(req,res)=>{
     const message = req.flash('homeMessage');
     res.render('user/home/index',{message: message});
 });
-app.use('/',user);
 app.post('/checkLogin',(req,res)=>{
     if(req.cookies.token){
         return res.send(true);
@@ -42,6 +42,8 @@ app.post('/checkLogin',(req,res)=>{
     return res.send(false);
 });
 
+app.use('/',user);
+app.use('/',product);
 
 //Middleware for Errors
 const errorMiddleware = require('./middlewares/error');

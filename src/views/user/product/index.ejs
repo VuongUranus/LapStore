@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Products</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+    <h2 class="homeHeading">Products</h2>
+    <div class="productWrapper row">
+
+        <div class="productFilter col-3">
+            <form method="get" action="/products">
+                <label for="">Search</label>
+                <div class="searchBar">
+                    <input type="text" name="keyword" class="form-control" required>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+            <div class="price-Range">
+                <a href="?price[gt]=0&price[lt]=20000000">Dưới 20tr</a>
+                <a href="?price[gt]=20000000&price[lt]=25000000">Từ 20-25tr</a>
+                <a href="?price[gt]=25000000&price[lt]=35000000">Từ 25-35tr</a>
+                <a href="?price[gt]=35000000&price[lt]=1000000000">Trên 35tr</a>
+            </div>
+            <div class="brand-radio">
+                <% brands.forEach(function(brand){ %>
+                    <a href="?brand=<%= brand.name %>"><%= brand.name %></a>
+                <% }) %>
+            </div>
+        </div>
+            <div class="col">
+            <div class="products">
+                <% products.forEach(function(product){ %>
+                    <a href="/product/<%=product._id%>" class="productCard" >
+                        <img src= <%= product.images[0].url%> alt="">
+                        <p><%=product.name%></p>
+                        <div class="rating">
+                            <span>
+                                <% for(var i=1;i<=5;i++){
+                                    if(product.ratings-1 >= 0){%>
+                                        <i class="bi bi-star-fill"></i>
+                                    <% product.ratings-- 
+                                    }
+                                    else if(product.ratings - 1 < 0 && product.ratings - 1 > -1 ){%>
+                                        <i class="bi bi-star-half"></i>
+                                    <%
+                                    product.ratings = Math.floor(product.ratings)
+                                    }
+                                    else{%>
+                                        <i class="bi bi-star"></i>
+                                    <%}
+                                } %>
+                            </span>
+                            <span class="productCardSpan">
+                                <%= product.numOfReviews %> Reviews
+                            </span>
+                        </div>
+                        <span><%= product.price %>đ</span>
+                    </a>
+                <% }) %>
+            </div>
+            <ul class="pagination">
+            </li><li class="page-item"><a class="page-link" href="#">Previous</a></li><li>
+            <%for(var i=1;i<=Math.ceil(productsLength/8);i++){
+                if(i==numberPage){%>
+                    </li><li class="page-item active"><a class="page-link" href="?page=<%= i %>"><%=i%></a></li><li>
+                <%}else{%>
+                    </li><li class="page-item"><a class="page-link" href="?page=<%= i %>"><%=i%></a></li><li>
+                <%}    
+            }%>
+            </li><li class="page-item"><a class="page-link" href="#">Next</a></li><li>
+            </ul>
+        </div>
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>
