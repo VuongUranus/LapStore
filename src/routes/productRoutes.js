@@ -10,7 +10,9 @@ const {
     addProductToCart,
     getProductsFromCart,
     deleteCart,
-    deleteProductFromCart
+    deleteProductFromCart,
+    updateProductFromCart,
+    getConfirmPage
 } = require('../controllers/productController');
 
 router.route('/products')
@@ -27,9 +29,19 @@ router.route('/cart')
 .get(isAuthenticationUser,getProductsFromCart)
 
 router.route('/cart/:product_id')
-.delete(isAuthenticationUser,deleteProductFromCart);
+.delete(isAuthenticationUser,deleteProductFromCart)
+.put(isAuthenticationUser,updateProductFromCart)
 
-router.route('/delete/cart')
-.get(deleteCart)
+router.route('/shipping')
+.get(isAuthenticationUser,(req,res)=>{
+    if(!req.cookies.cart){
+        return res.redirect('/cart');
+    }
+    const message = req.flash('shippingMessage');
+    return res.render('user/cart/shipping',{message:message});
+});
+
+router.route('/confirm')
+.get(isAuthenticationUser,getConfirmPage);
 
 module.exports = router;

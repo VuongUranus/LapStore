@@ -74,10 +74,7 @@ exports.addProductToCart = async(req,res,next)=>{
             return next(new ErrorHander("Product can not found",`/product/${req.body.product}`,"productDetailMessage"));
         }
 
-        let Cart = [];
-        if(req.cookies.cart){
-            Cart = req.cookies.cart;
-        }
+        let Cart = req.cookies.cart || [];
 
         const isAdded = Cart.find(prod => prod.product_id.toString() === req.body.product.toString());
 
@@ -122,7 +119,26 @@ exports.getProductsFromCart = async(req,res,next)=>{
 
     try{
 
-        res.json(req.cookies.cart);
+        const cart = req.cookies.cart;
+
+        if(!cart){
+            return next(new ErrorHander('Please, add the product to the cart.','/products','productMessage'));
+        }
+
+        let products = [];
+
+        for(let i=0;i<cart.length;i++){
+
+            let pr = await Product.findById(cart[i].product_id);
+            if(pr){
+                pr.quantity = cart[i].quantity;
+                products.push(pr);
+            }
+        }
+
+
+        const message = req.flash('cartMessage');
+        return res.render('user/cart/',{message:message,products:products});
 
     }catch(error){
         const message = typeErrors(error);
@@ -136,11 +152,63 @@ exports.deleteProductFromCart = async(req,res,next)=>{
 
     try{
 
-        const {product_id} = req.params;
+        const product_id = req.params.product_id;
         
-        const {cart} = req.cookies;
+        const  cart = req.cookies.cart ;
 
-        cart = cart.filter(prod => prod.product_id.toString() !== product_id.toString());
+        const Cart = cart.filter(prod => prod.product_id.toString() !== product_id.toString());
+        console.log(Cart);
+
+        if(Cart.length === 0){
+            return res.cookie("cart",null,{
+                expires: new Date(Date.now()),
+                httpOnly: true, 
+            }).redirect('/products');
+        }
+
+        //Options for cookie
+        const options = {
+            expires: new Date(
+            Date.now + process.env.COOKIE_EXPIRES * 24 *60*60*1000
+            ),
+            httpOnly: true,
+        }
+        return res.cookie('cart',Cart,options).redirect('/cart');
+
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/cart','cartMessage'));
+    }
+
+}
+
+//update product from cart
+exports.updateProductFromCart = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.params.product_id);
+        if(!product){
+            return next(new ErrorHander("Product can not found",'/cart',"cartMessage"));
+        }
+
+        if(req.body.quantity > product.Stock){
+            return next(new ErrorHander("Don't have enough stock",'/cart','cartMessage'));
+        }
+
+        let cart = req.cookies.cart || [];
+
+        const quantity = req.body.quantity;
+
+        if(quantity == 0 || !quantity)
+            return res.redirect('/cart');
+
+        cart.forEach(prod => {
+            if(prod.product_id.toString() === req.params.product_id.toString()){
+                prod.quantity = quantity;
+            }
+        });
 
         //Options for cookie
         const options = {
@@ -153,17 +221,53 @@ exports.deleteProductFromCart = async(req,res,next)=>{
 
 
     }catch(error){
+
         const message = typeErrors(error);
         return next(new ErrorHander(message,'/cart','cartMessage'));
+
     }
 
 }
 
-exports.deleteCart = async(req,res,next)=>{
-    
-    res.cookie("cart",null,{
-        expires: new Date(Date.now()),
-        httpOnly: true,
-    }).send('Deleted Cart');
+//confirm page
+exports.getConfirmPage = async(req,res,next)=>{
+
+    try{
+        
+        if(!/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(req.query.phoneNo.toString())){
+            return next(new ErrorHander('Phone Number is not valid','/shipping','shippingMessage'));
+        }
+
+        const shippingInfo = {
+            address: req.query.address,
+            city: req.query.city,
+            province: req.query.province,
+            phoneNo : req.query.phoneNo
+        };
+
+        const cart = req.cookies.cart;
+        if(!cart || !shippingInfo.address || !shippingInfo.city || !shippingInfo.province){
+            return res.redirect('/cart');
+        }
+
+        let products = [];
+
+        for(let i = 0;i<cart.length;i++){
+
+            let pr = await Product.findById(cart[i].product_id);
+            if(pr){
+                pr.quantity = cart[i].quantity;
+                products.push(pr);
+            }
+        }
+
+        const message = req.flash('confirmMessage');
+        return res.render('user/cart/confirm',{message:message,shippingInfo:shippingInfo,products:products,user:req.user});
+
+    }catch(err){
+
+        const message = typeErrors(err);
+        return next(new ErrorHander(message,'/shipping','shippingMessage'));
+    }
 
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Cart</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+    
+    <div class="wrapper-cart">
+
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% products.forEach(function(product){ %>
+                    <tr>
+                        <td class="product">
+                            <img src=<%= product.images[0].url %>>
+                            <div>
+                                <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                <p class="price">Price: <strong style="font-weight: 400;"><%= product.price %></strong></p>
+                                <form action="/cart/<%= product._id %>?_method=DELETE" method="post">
+                                    <button type="submit" class="btn-link">Remove</button>
+                                </form>
+                                <!-- <a href="/cart/<%= product._id %>?_method=DELETE">Remove</a> -->
+                            </div>
+                        </td>
+                        <td>
+                            <form action="/cart/<%= product._id %>?_method=PUT" method="post">
+                                <input name="quantity" type="number" value="<%= product.quantity %>" min="1" max="<%= product.Stock %>">
+                            </form>
+                        </td>
+                        <td class="subtotal">
+                            <%= product.quantity * product.price %>
+                        </td>
+                    </tr>
+                <% }) %>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td>Gross Total</td>
+                    <td class="grossTotal">2000000đ</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <a href="/shipping" class="btn btn-primary">Check Out</a>
+
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

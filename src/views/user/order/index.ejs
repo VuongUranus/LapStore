@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>My Order</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+
+    <div class="wrapper-myorder">
+         <h2 class="homeHeading">My Orders</h2>
+         <table class="table">
+             <thead>
+                 <tr>
+                     <th></th>
+                     <th>Date</th>
+                     <th>Products</th>
+                     <th>Total</th>
+                     <th>Status</th>
+                 </tr>
+             </thead>
+             <tbody>
+                <% orders.forEach(function(order){%>
+                    <tr>
+                        <td><a href="/order/<%= order._id %>"><i class="bi bi-eye-fill"></i></a></td>
+                        <td style="width:20%"><p><%= order.createAt.toDateString() %></p></td>
+                        <td style="width: 50%;"><div>
+                            <% order.orderItems.forEach(function(item){%>
+                                <p><%= item.name %></p>
+                            <%}) %>
+                        </div></td>
+                        <td style="width:20%"><p><%= order.totalPrice %>đ</p></td>
+                        <td style="width:10%"><p><%= order.orderStatus %></p></td>
+                    </tr>
+                <%}) %>
+             </tbody>
+         </table>
+    </div>
+
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

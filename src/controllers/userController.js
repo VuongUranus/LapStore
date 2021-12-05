@@ -59,6 +59,10 @@ exports.logout = async (req,res,next)=>{
             expires: new Date(Date.now()),
             httpOnly: true,
         });
+        res.cookie("cart",null,{
+            expires: new Date(Date.now()),
+            httpOnly: true, 
+        });
     
         res.redirect('/login'); 
     

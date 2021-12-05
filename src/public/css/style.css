@@ -680,3 +680,256 @@ a.productCard div.rating i{
 .wrapper-detail .reviews .productReviews .rating{
     color: darkorange;
 }
+
+/* Cart */
+.wrapper-cart{
+    min-height: 100vh;
+    width: 80vw;
+    max-width: 100%;
+    margin: 7vmax auto;
+}
+
+.wrapper-cart table{
+    width: 100%;
+}
+
+.wrapper-cart table thead{
+    background: #eb4034;
+    color: #fff;
+}
+
+.wrapper-cart table thead th{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.wrapper-cart table tr th:first-child{
+    width: 70%;
+}
+
+.wrapper-cart table tr th:nth-child(2){
+    width: 15%;
+}
+
+.wrapper-cart table tbody img{
+    width: 15%;
+}
+.wrapper-cart table tbody .product{
+    display: flex;
+    align-items: center;
+}
+.wrapper-cart .product a{
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+.wrapper-cart .product p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+}
+.wrapper-cart .product form button{
+    color: #eb4034;
+    font-size: 12px;
+    border: none;
+    background: none;
+}
+
+
+.wrapper-cart input[type="number"]{
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    color: #333;
+    border: none;
+    font-size: 14px;
+}
+.wrapper-cart td{
+    font-size: 14px;
+    vertical-align: middle;
+}
+.wrapper-cart table tfoot{
+    border-top: solid 0.5px #999;
+}
+.wrapper-cart .btn{
+    background: #eb4034;
+    float: right;
+    width: 15vmax;
+    border: 1px solid #eb4034;
+}
+.wrapper-cart .btn:hover{
+    border: 1px solid #eb4034;
+    background: transparent;
+    color: #333;
+}
+
+/* Shipping details page */
+.wrapper-shipping{
+    min-height: 100vh;
+    width: 80vw;
+    max-width: 100%;
+    margin: auto;
+}
+.wrapper-shipping form{
+    width: 40%;
+    margin: auto;
+}
+
+.wrapper-shipping form input{
+    margin-bottom: 10%;
+    padding: 10px;
+    font-size: 14px;
+    height: max-content;
+}
+.wrapper-shipping .btn{
+    background-color: #eb4034;
+    color: #fff;
+    border: 1px solid #eb4034;
+    transition: all 0.5s;
+}
+.wrapper-shipping .btn:hover{
+    background-color: transparent;
+    color: #333;
+}
+
+/* Confrim page */
+.wrapper-confirm{
+    min-height: 100vh;
+    width: 80vw;
+    max-width: 100%;
+    margin: auto;
+    padding: 12vmax 0;
+}
+.wrapper-confirm .left-content{
+    border-right: 1px solid #999;
+}
+
+.wrapper-confirm h1{
+    font-size: 25px;
+    font-weight: 500;
+    color: #333;
+}
+.wrapper-confirm .left-content div.info{
+    margin-left: 20px;
+    margin-bottom: 40px;
+}
+.wrapper-confirm p,
+.wrapper-confirm span,
+.wrapper-confirm a{
+    font-size: 14px;
+    font-weight: 300;
+    color: #333;
+}
+.wrapper-confirm .left-content div.cart-item{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wrapper-confirm .left-content div.cart-item img{
+    width: 10%;
+    margin-right: 15px;
+    /* flex-grow: 1; */
+}
+
+
+.wrapper-confirm .left-content div.cart-item p:first-child{
+    word-wrap: break-word;
+}
+/* .wrapper-confirm .left-content div.cart-item p:last-child{
+    flex-shrink: 1;
+} */
+.wrapper-confirm .flex{
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrapper-confirm .right-content{
+    text-align: center;
+}
+.wrapper-confirm .right-content .btn{
+    background-color: #eb4034;
+    color: #fff;
+    border: 1px solid #eb4034;
+    transition: all 0.5s;
+}
+.wrapper-confirm .right-content .btn:hover{
+    background-color: transparent;
+    color: #333;
+}
+.wrapper-confirm .paymethod{
+    text-align: left;
+}
+
+.wrapper-confirm .paymethod input[type="radio"]{
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+/* my order */
+.wrapper-myorder{
+    min-height: 100vh;
+    max-width: 100%;
+    width: 80vw;
+    margin: auto;
+    padding-bottom: 2vmax;
+}
+.wrapper-myorder a,
+.wrapper-myorder p{
+    font-size: 14px;
+    font-weight: 300;
+    color: #333;
+    word-wrap: break-word;
+}
+
+.wrapper-myorder th{
+    font-size: 16px;
+    font-weight: 500;
+    color: #eaeaea
+}
+.wrapper-myorder thead {
+    background: #eb4034;
+}
+
+/* My Order Details */
+.wrapper-myOrderDetails{
+    min-height: 100vh;
+    max-width: 100%;
+    width: 80vw;
+    margin: auto;
+    padding: 10vmax 0;
+}
+
+.wrapper-myOrderDetails h3{
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+.wrapper-myOrderDetails p,
+.wrapper-myOrderDetails a{
+    font-size: 14px;
+    font-weight: 300;
+    color: #333;
+}
+
+.wrapper-myOrderDetails .col:first-child{
+    border-right: 1px solid #333;
+}
+
+.wrapper-myOrderDetails .row .col{
+    padding: 20px 50px;
+}
+.wrapper-myOrderDetails .row{
+    margin-bottom: 40px;
+}
+
+.wrapper-myOrderDetails th{
+    font-size: 16px;
+    font-weight: 500;
+}
+.wrapper-myOrderDetails th,
+.wrapper-myOrderDetails td{
+    text-align: center;
+    vertical-align: middle;
+}

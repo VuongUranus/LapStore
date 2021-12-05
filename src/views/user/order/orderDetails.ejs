@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Order Details</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+
+    <div class="wrapper-myOrderDetails">
+        <div class="row">
+            <div class="col">
+                <h3>Shipping Info</h3>
+                <p>Doan Minh Vuong</p>
+                <p>PhoneNo: 098765312</p>
+                <p>Address: Nga 5 chuong cho, PR-TC, Ninh Thuan</p>
+            </div>
+            <div class="col">
+                <h3>Payment Info</h3>
+                <p>Method: Cash</p>
+                <p>Status: Unpaid</p>
+                <p>PaidAt: 03/10/2021</p>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Products</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 10%;"><img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" width="100%"></td>
+                    <td style="width: 40%; word-wrap: break-word; text-align: left;"><a href="#">Thú Bông Doraemon Tagger (Size S)</a></td>
+                    <td style="width: 20%;"><p><138.300 ₫</p></td>
+                    <td style="width: 10%;"><p>1</p></td>
+                    <td style="width: 20%;"><p>138.300₫ </p></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td style="color: #eb4034;">138.300₫</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

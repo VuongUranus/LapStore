@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Shipping Details</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+    <form action="/order/new" method="post" id="createOrder" >
+        <div class="wrapper-confirm row">
+            <div class="left-content col-8">
+                <h1>Shipping Info</h1>
+                <div class="info">
+                    <input type="hidden" name="phoneNo" value="<%= shippingInfo.phoneNo %>">
+                    <input type="hidden" name="address" value="<%= shippingInfo.address %>">
+                    <input type="hidden" name="city" value="<%= shippingInfo.city %>">
+                    <input type="hidden" name="province" value="<%= shippingInfo.province %>">
+                    <p>Name: <strong><%= user.name %></strong></p>
+                    <p>Phone: <strong><%= shippingInfo.phoneNo %></strong></p>
+                    <p>Address: <strong><%= shippingInfo.address +", "+ shippingInfo.city +", "+ shippingInfo.province %> </strong></p>
+                </div>
+                <h1>Your Cart Items:</h1>
+                <%
+                var subtotal = 0;
+                products.forEach(function(product){%>
+
+                    <% subtotal += product.quantity * product.price %>
+
+                    <div class="cart-item">
+                        <img src=<%= product.images[0].url %>>
+                        <a href="/product/<%= product._id %>"><%= product.name %></a>
+                        <p><%=product.quantity +" x "+ product.price %> = <strong><%= product.quantity * product.price %>đ</strong></p>
+                    </div>
+
+                <%}) %>
+            </div>
+            <div class="right-content col-4">
+                <div>
+                <h1>Order Summery</h1>
+                <hr>
+                <div class="flex">
+                    <input type="hidden" name="total" value="<%= subtotal %>">
+                    <p>Subtotal:</p>
+                    <p><%= subtotal %>đ</p>
+                </div>
+                <div class="flex">
+                    <p>Shipping Charges:</p>
+                    <p>0đ</p>
+                </div>
+                <hr>
+                <div class="flex">
+                    <p>Total:</p>
+                    <p><%= subtotal %>đ</p>
+                </div>
+                <h1 style="margin-top: 40px;">Payment Method</h1>
+                <div class="paymethod">
+                    <input type="radio" name="paymethod" value="cash" checked><span>Cash</span><br>
+                    <input type="radio" name="paymethod" value="bankCart"><span>Bank Cart</span><br>
+                    <input type="radio" name="paymethod" value="momo"><span>Momo</span><br>
+                </div>
+                <button class="btn btn-primary" type="submit">Process To Payment</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

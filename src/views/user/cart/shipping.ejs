@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Shipping Details</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+    
+        <div class="wrapper-shipping">
+            <h2 class="homeHeading">Shipping Details</h2>
+            <form action="/confirm" method="get">
+                <input type="text" name="address" placeholder="Address" required class="form-control">
+                <input type="text" name="city" class="form-control" placeholder="City" required>
+                <input type="text" name="province" class="form-control" placeholder="Province" required >
+                <input type="number" name="phoneNo" class="form-control" placeholder="Phone Number" minlength="10" maxlength="10" required>
+                <input type="submit" value="Continue" class="btn form-control">
+            </form>
+        </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>
