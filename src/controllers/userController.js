@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const ErrorHander = require('../utils/errorHander');
 const sendToken = require('../utils/jwtToken');
 const typeErrors = require('../utils/typeErrors');
+const jwt = require('jsonwebtoken');
 
 //Register a User
 exports.registerUser =  async (req,res,next)=>{
@@ -61,7 +62,7 @@ exports.logout = async (req,res,next)=>{
         });
         res.cookie("cart",null,{
             expires: new Date(Date.now()),
-            httpOnly: true, 
+            httpOnly: true,
         });
     
         res.redirect('/login'); 
@@ -156,21 +157,21 @@ exports.updateProfile = async(req,res,next)=>{
 
 };
 
+//!ADMIN
+
 //Get All User (admin)
 exports.getAllUser = async (req,res,next)=>{
 
     try {
         
-        const users = await User.find();
+        const users = await User.find({role:"user"});
 
-        res.status(200).json({
-            success:true,
-            users,
-        });
+        const message = req.flash('adminUserMessage');
+        res.render('admin/user/',{message:message,users});
 
     } catch (error) {
         const message = typeErrors(error);
-        next(new ErrorHander(message));
+        return next(new ErrorHander(message,'/','homeMessage'));
     }
 
 };
@@ -183,17 +184,15 @@ exports.getSingleUser =  async (req,res,next)=>{
         const user = await User.findById(req.params.id);
 
         if(!user){
-            return next(new ErrorHander(`User does not exist with Id: ${req.params.id}`));
+            return next(new ErrorHander(`User does not exist with Id: ${req.params.id}`,'/admin/users','adminUserMessage'));
         }
-    
-        res.status(200).json({
-            success: true,
-            user,
-        });
+        
+        const message = req.flash('adminUserDetailMessage');
+        return res.render('admin/user/details',{message:message,user});
 
     } catch (error) {
         const message = typeErrors(error);
-        next(new ErrorHander(message));
+        next(new ErrorHander(message,'/admin/users','adminUserMessage'));
     }
 
 };
@@ -209,25 +208,22 @@ exports.updateUser = async(req,res,next)=>{
             role: req.body.role,
         }
     
-        const user = User.findByIdAndUpdate(req.params.id,newUserData,{
+        await User.findByIdAndUpdate(req.params.id,newUserData,{
             new:true,
             runValidators:true,
             useFindAndModify: false,
         });
     
-        res.status(200).json({
-            success:true,
-            user
-        });
+        res.redirect(`/admin/user/${req.params.id}`);
 
     } catch (error) {
         const message = typeErrors(error);
-        next(new ErrorHander(message));
+        next(new ErrorHander(message,`/admin/user/${req.params.id}`,'adminUserDetailMessage'));
     }
 
 };
 
-//Delete User
+//Delete User --Admin
 exports.deleteUser = async (req,res,next)=>{
 
     try {
@@ -240,10 +236,7 @@ exports.deleteUser = async (req,res,next)=>{
     
         await user.remove();
     
-        res.status(200).json({
-            success: true,
-            message: "User deleted successfully!"
-        })
+        res.redirect('/admin/users');
 
     } catch (error) {
         const message = typeErrors(error);
@@ -251,3 +244,5 @@ exports.deleteUser = async (req,res,next)=>{
     }
 
 };
+
+

@@ -12,9 +12,13 @@ const {
     deleteCart,
     deleteProductFromCart,
     updateProductFromCart,
-    getConfirmPage
+    getConfirmPage,
+    createReviewPage,
+    createProductReview,
+    deleteReview
 } = require('../controllers/productController');
 
+//Product
 router.route('/products')
 .get(getAllProducts)
 
@@ -24,6 +28,8 @@ router.route('/product/new')
 router.route('/product/:id')
 .get(getProductDetail)
 
+
+//Cart
 router.route('/cart')
 .post(isAuthenticationUser,addProductToCart)
 .get(isAuthenticationUser,getProductsFromCart)
@@ -43,5 +49,13 @@ router.route('/shipping')
 
 router.route('/confirm')
 .get(isAuthenticationUser,getConfirmPage);
+
+//Reviews
+router.route('/review/new')
+.get(isAuthenticationUser,createReviewPage)
+.post(isAuthenticationUser,createProductReview)
+
+router.route('/review/delete')
+.get(isAuthenticationUser,deleteReview)
 
 module.exports = router;

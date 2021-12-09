@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <%- include ("../../partials/head.ejs") %>
+
+    <title>Admin / User Details</title>
+</head>
+<body>
+ 
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../partials/bubble.ejs") %>
+    <div class="wrapper-profile">
+        <h2 class="homeHeading">User Details</h2>
+        <form method="post" action="/admin/user/<%= user._id %>?_method=PUT">
+            <div>
+                <h4>Full Name</h4>
+                <input class="form-control" type="text" name="name" placeholder="Full name" value="<%= user.name %>" required>
+            </div>
+            <div>
+                <h4>Email</h4>
+                <input class="form-control" type="email" name="email" placeholder="Email" value="<%= user.email %>" required>
+            </div>
+            <div>
+                <h4>Role</h4>
+                <select name="role" class="form-control" style="font-size:14px; color: #333;" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div>
+                <h4>Joined On</h4>
+                <p><%=user.createAt.toDateString()%></p>
+            </div>
+            
+            <div>
+                <button type="submit" class="btn btn-sm form-control" onclick="return confirm('Update?')">Update</button>
+                <form action="/admin/user/<%= user._id %>?_method=DELETE" method="post">
+                    <button class="btn btn-sm" onclick="return confirm('Delete?')" type="submit" style="background-color: rgb(68,68,68);">Delete</button>                            
+                </form>
+            </div>
+        </form>
+
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+</body>
+</html>

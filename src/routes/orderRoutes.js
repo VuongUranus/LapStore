@@ -6,7 +6,8 @@ const { isAuthenticationUser, authorizeRoles } = require('../middlewares/auth');
 const {
     createOrder,
     getMyOrder,
-    getMyOrderDetails
+    getMyOrderDetails,
+    cancelOrder
 } = require('../controllers/orderController');
 
 router.route('/order/new')
@@ -17,5 +18,6 @@ router.route('/orders/me')
 
 router.route('/order/:id')
 .get(isAuthenticationUser,getMyOrderDetails)
+.delete(isAuthenticationUser,cancelOrder)
 
 module.exports = router;

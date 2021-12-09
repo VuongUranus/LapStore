@@ -11,11 +11,11 @@
     <%- include ("../../partials/header.ejs") %>
 
     <%- include ("../../partials/bubble.ejs") %>
+    <a href="/" class="backPrePage"><i class="bi bi-arrow-bar-left"></i> Back to previous page</a>
 
     <div class="wrapper-profile">
-
+        <h2 class="homeHeading">My Profile</h2>
         <form method="post" action="/me/update?_method=PUT">
-            <h3> My Profile</h3>
             <div>
                 <h4>Full Name</h4>
                 <input class="form-control" type="text" name="name" placeholder="Full name" value="<%= user.name %>" required>
@@ -30,8 +30,8 @@
             </div>
             
             <div>
-                <button type="submit" class="btn btn-sm">Change</button>
-                <a href="/password/update" class="btn btn-sm">Change Password</a>
+                <button type="submit" class="btn" onclick="return confirm('Update?')">Change</button>
+                <a href="/password/update" class="btn">Change Password</a>
             </div>
         </form>
 

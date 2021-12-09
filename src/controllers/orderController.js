@@ -52,7 +52,7 @@ exports.createOrder = async(req,res,next)=>{
             order.paidAt = Date.now();
         }
         
-        const ok = await Order.create(order);
+        await Order.create(order);
         res.cookie("cart",null,{
             expires: new Date(Date.now()),
             httpOnly: true, 
@@ -89,7 +89,7 @@ exports.getMyOrderDetails = async(req,res,next)=>{
 
     try{
 
-        const order = await Order.findOne({_id:req.params.id,user:req.user._id});
+        const order = await Order.findOne({_id:req.params.id,user:req.user._id}).populate("user","name email");
 
         if(!order){
             return next(new ErrorHander('Can not found order','/order/me','myorderMessage'));
@@ -102,6 +102,34 @@ exports.getMyOrderDetails = async(req,res,next)=>{
     }catch(error){
         const message = typeErrors(error);
         return next(new ErrorHander(message,'/order/me','myorderMessage'));
+
+    }
+
+}
+
+//Cancel my order
+exports.cancelOrder = async(req,res,next)=>{
+
+    try{
+
+        const order = await Order.findOne({_id:req.params.id,user:req.user._id});
+
+        if(!order){
+            return res.redirect('/orders/me');
+        }
+
+        if(order.orderStatus.toLowerCase() === 'processing'){
+            await Order.findByIdAndUpdate(req.params.id,{orderStatus: "Canceled"});
+            return next(new ErrorHander('Order canceled','/orders/me','myorderMessage'));
+        }else{
+            return res.redirect(`/order/${req.params.id}`);
+        }
+
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/orders/me','myorderMessage'));
 
     }
 

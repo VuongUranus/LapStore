@@ -73,5 +73,61 @@ $(document).ready(()=>{
 
     grossTotal();
 
+    //Review Effect
 
+    let valueInput = Number($('input[name="rating"]').val());
+    for(let i=1;i<=valueInput;i++){
+        $(`.wrapper-addReview .rating i#s${i}`).css('color','darkorange');
+    }
+
+    $('.wrapper-addReview .rating i#s1').click(()=>{
+
+        $('input[name="rating"]').val("1");
+        $('.wrapper-addReview .rating i#s1').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s2').css('color','#999');
+        $('.wrapper-addReview .rating i#s3').css('color','#999');
+        $('.wrapper-addReview .rating i#s4').css('color','#999');
+        $('.wrapper-addReview .rating i#s5').css('color','#999');
+
+    });
+    $('.wrapper-addReview .rating i#s2').click(()=>{
+
+        $('input[name="rating"]').val("2");
+        $('.wrapper-addReview .rating i#s1').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s2').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s3').css('color','#999');
+        $('.wrapper-addReview .rating i#s4').css('color','#999');
+        $('.wrapper-addReview .rating i#s5').css('color','#999');
+
+    });
+    $('.wrapper-addReview .rating i#s3').click(()=>{
+
+        $('input[name="rating"]').val("3");
+        $('.wrapper-addReview .rating i#s1').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s2').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s3').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s4').css('color','#999');
+        $('.wrapper-addReview .rating i#s5').css('color','#999');
+    });
+    $('.wrapper-addReview .rating i#s4').click(()=>{
+
+        $('input[name="rating"]').val("4")
+        $('.wrapper-addReview .rating i#s1').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s2').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s3').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s4').css('color','darkorange');
+        $('.wrapper-addReview .rating i#s5').css('color','#999');
+        
+
+    });
+    $('.wrapper-addReview .rating i#s5').click(()=>{
+
+        $('input[name="rating"]').val("5");
+        $('.wrapper-addReview .rating i').css('color','darkorange');
+
+    });
+
+
+    //!Admin
+    
 });

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>My Order</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include("../../partials/bubble.ejs") %>
+    
+    <a href="/product/<%= data.productId%>" class="backPrePage"><i class="bi bi-arrow-bar-left"></i> Back to previous page</a>
+
+        <div class="wrapper-addReview">
+
+            <h2 class="homeHeading">Review Product</h2>
+            <form action="/review/new" method="post">
+                <h3>Submit Review</h3>
+                <input type="hidden" name="productId" value="<%= data.productId%>">
+                <input type="hidden" name="rating" value="<%= data.rating%>">
+                <div class="rating">
+                    <i id="s1" class="bi bi-star-fill"></i>
+                    <i id="s2" class="bi bi-star-fill"></i>
+                    <i id="s3" class="bi bi-star-fill"></i>
+                    <i id="s4" class="bi bi-star-fill"></i>
+                    <i id="s5" class="bi bi-star-fill"></i>
+                </div>
+                <textarea name="comment" placeholder="Somethings for product" cols="50" rows="10" class="form-control"><%= data.comment %></textarea>
+    
+                <button type="submit" class="btn btn-primary" style="background: #eb4034;">Submit</button>
+            </form>
+
+        </div>
+
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

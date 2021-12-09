@@ -31,6 +31,7 @@ app.use(flash());
 const user = require('./routes/userRoutes');
 const product = require('./routes/productRoutes');
 const order = require('./routes/orderRoutes');
+const brand = require('./routes/brandRoutes');
 
 app.get('/',(req,res)=>{
     const message = req.flash('homeMessage');
@@ -46,6 +47,7 @@ app.post('/checkLogin',(req,res)=>{
 app.use('/',user);
 app.use('/',product);
 app.use('/',order);
+app.use('/',brand);
 
 //Middleware for Errors
 const errorMiddleware = require('./middlewares/error');

@@ -10,6 +10,7 @@
 
     <%- include("../../partials/bubble.ejs") %>
 
+    <a href="/products" class="backPrePage"><i class="bi bi-arrow-bar-left"></i> Back to previous page</a>
     <div class="wrapper-detail">
         <div class="info-product row">
             <div class="col-5">
@@ -63,11 +64,12 @@
                 <hr>
                 <h5>Description</h5>
                 <p><%= product.description %></p>
+                <a href="/review/new?productId=<%= product._id %>" class="btn btn-primary" style="background-color: #eb4034;">Review</a>
             </div>
         </div>
         <div class="reviews">
             <h2 class="homeHeading">Product Reviews</h2>
-            <h3><%= product.ratings%><em>/5</em></h3>
+            <h3><%= product.ratings.toFixed(1)%><em>/5</em></h3>
             <div class="rating">
                 <%
                 var ratings = product.ratings 
@@ -89,6 +91,10 @@
             <hr>
             <% product.reviews.forEach(function(p){%>
                 <div class="productReviews">
+                    <% if(user.length === 0){%>   
+                    <%}else if(p.user.toString() === user._id.toString()){%>
+                        <a href="/review/delete?productId=<%= product._id %>" style="float: right; color: #eb4034;"><i class="bi bi-x-circle-fill"></i></a>
+                    <%} %>
                     <h6>by: <%= p.name %></h6>
                     <div class="rating">
                         <%

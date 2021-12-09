@@ -3,6 +3,8 @@ const Brand = require('../models/brandModel');
 const ErrorHander = require('../utils/errorHander');
 const typeErrors = require('../utils/typeErrors');
 const ApiFeatures = require('../utils/apifeatures');
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
 
 
 //Create Product -- Admin
@@ -52,8 +54,15 @@ exports.getProductDetail = async(req,res,next)=>{
             return next(new ErrorHander("Product not found","/products","productMessage"));
         }
 
+        const {token} = req.cookies;
+        let user = [];
+        if(token){
+            const decodedData = jwt.verify(token,process.env.JWT_SECRET);
+            req.user = await User.findById(decodedData.id);
+            user = req.user;
+        }
         const message = req.flash('productDetailMessage');
-        return res.render('user/product/details',{product:product,message:message});
+        return res.render('user/product/details',{product:product,message:message,user:user});
 
     }catch(error){
 
@@ -268,6 +277,126 @@ exports.getConfirmPage = async(req,res,next)=>{
 
         const message = typeErrors(err);
         return next(new ErrorHander(message,'/shipping','shippingMessage'));
+    }
+
+}
+
+//!Review
+
+//Get review page
+exports.createReviewPage = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.query.productId);
+        if(!product){
+            return next(new ErrorHander('Can not found product','/products','productMessage'));
+        }
+
+        const isReviewed = product.reviews.filter(rev => rev.user.toString() === req.user._id.toString());
+        const data = {
+            productId: req.query.productId,
+        }
+        if(isReviewed.length > 0){
+            data.rating = isReviewed[0].rating;
+            data.comment = isReviewed[0].comment;
+        }else{
+            data.rating = 0;
+            data.comment = "";
+        }
+
+        const message = req.flash('reviewMessage');
+        return res.render('user/review/addReview',{message:message,data:data});
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/products','productMessage'));
+    }
+
+}
+
+//Create Product Review or Update the review
+exports.createProductReview = async(req,res,next)=>{
+
+    try{
+
+        const {rating,comment,productId} = req.body;
+
+        if(rating < 1){
+            return res.redirect(`/review/new?productId=${productId}`);
+        }
+
+        const review = {
+            user: req.user._id,
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+        };
+    
+        const product = await Product.findById(productId);
+    
+        const isReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id.toString());
+    
+        if (isReviewed) {
+            product.reviews.forEach(rev => {
+                if(rev.user.toString() === req.user._id.toString())
+                    (rev.rating = rating),(rev.comment = comment);
+            })
+        } else {
+            product.reviews.push(review);
+            product.numOfReviews = product.reviews.length;
+        }
+    
+        let avg = 0;
+        product.reviews.forEach(rev =>{
+            avg += rev.rating;
+        });
+        console.log(avg);
+    
+        product.ratings = avg/product.reviews.length;
+        
+        await product.save({validateBeforeSave:false});
+    
+        return res.redirect(`/product/${req.body.productId}`);
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,`/product/${req.body.productId}`,'productDetailMessage'));
+    }
+
+}
+
+//Delete Review
+exports.deleteReview = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.query.productId);
+
+        if(!product){
+            return next(new ErrorHander("Product not found",'/products','productMessage'));
+        }
+    
+        const reviews = product.reviews.filter(rev => rev.user.toString() !== req.user.id.toString());
+    
+        let avg = 0;
+        reviews.forEach(rev=>{
+            avg += rev.rating;
+        });
+    
+        product.ratings = avg / reviews.length || 0;
+        product.numOfReviews = reviews.length || 0;
+        product.reviews = reviews;
+    
+        await product.save({validateBeforeSave:false});
+    
+        return next(new ErrorHander('Delete Review Success',`/product/${req.query.productId}`,'productDetailMessage'));
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,`/product/${req.query.productId}`,'productDetailMessage'));
     }
 
 }
