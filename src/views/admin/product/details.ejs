@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Product Details</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+
+    <div class="wrapper-detail">
+        <div class="info-product row">
+            <div class="col-5">
+                <div class="image">
+                    <img src="/images/products/<%= product.images[0].url %>">
+                    <!-- <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
+                    <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt=""> -->
+                </div>
+            </div>
+            <div class="col-7 details">
+                <h3><%= product.name %></h3>
+                <hr>
+                <div class="rating">
+                    <%
+                    var ratings = product.ratings 
+                    for(var i=1;i<=5;i++){
+                        if(ratings-1 >= 0){%>
+                            <i class="bi bi-star-fill"></i>
+                        <% ratings-- 
+                        }
+                        else if(ratings - 1 < 0 && ratings - 1 > -1 ){%>
+                            <i class="bi bi-star-half"></i>
+                        <%
+                        ratings = Math.floor(ratings)
+                        }
+                        else{%>
+                            <i class="bi bi-star"></i>
+                        <%}
+                    } %>
+                </div>
+                <span>(<%= product.numOfReviews %> review)</span>
+                <a href="/admin/reviews?id=<%= product._id %>" class="btn btn-primary">Get Reviews</a>
+                <hr>
+                <h4>Price: <%= product.price %>đ</h4>
+                <hr>
+                <h4>Brand: <%= product.brand %></h4>
+                <hr>
+                <p style="font-size: 16px; font-weight: 600; color: #555;">Stock: <%= product.Stock %></p>
+                <hr>
+                <h5>Description</h5>
+                <p><%= product.description %></p>
+                <a href="/admin/product/edit/<%= product._id %>" class="btn btn-primary"><i class="bi bi-scissors"></i></a>
+                <form action="/admin/product/<%= product._id %>?_method=DELETE" method="post" style="display: inline-block;">
+                    <button type="submit" class="btn btn-primary form-control" onclick="return confirm('Delete?')" ><i class="bi bi-trash-fill"></i></button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <!-- <%- include ("../../partials/footer.ejs") %> -->
+
+</body>
+</html>

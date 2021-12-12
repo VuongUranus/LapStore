@@ -18,142 +18,36 @@
 
     <h2 class="homeHeading">Featured Products</h2>
     <div class="featuredProducts">
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard" >
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
-        <a href="#" class="productCard">
-            <img src="/images/products/swift-x-sfx14-41g-fpbl1-pp-01a.jpg" alt="">
-            <p>Product Name</p>
-            <div class="rating">
-                <span>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                </span>
-                <span class="productCardSpan">
-                    (2 Reviews)
-                </span>
-            </div>
-            <span>12000d</span>
-        </a>
+        <% products.forEach(function(product){%>
+
+            <a href="/product/<%= product._id %>" class="productCard" >
+                <img src="/images/products/<%= product.images[0].url %>" alt="">
+                <p><%= product.name %></p>
+                <div class="rating">
+                    <span>
+                        <% for(var i=1;i<=5;i++){
+                            if(product.ratings-1 >= 0){%>
+                                <i class="bi bi-star-fill"></i>
+                            <% product.ratings-- 
+                            }
+                            else if(product.ratings - 1 < 0 && product.ratings - 1 > -1 ){%>
+                                <i class="bi bi-star-half"></i>
+                            <%
+                            product.ratings = Math.floor(product.ratings)
+                            }
+                            else{%>
+                                <i class="bi bi-star"></i>
+                            <%}
+                        } %>
+                    </span>
+                    <span class="productCardSpan">
+                        (<%= product.numOfReviews %> Reviews)
+                    </span>
+                </div>
+                <span><%= product.price %></span>
+            </a>
+
+        <%}) %>
     </div>
 
 

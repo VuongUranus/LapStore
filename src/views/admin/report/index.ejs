@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Report</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+    <h2 class="homeHeading">Top Sell</h2>
+    <div class="productWrapper" style="width:80%">
+            <div>
+                <table class="table">
+                    <thead style="background-color: #eb4034;color: #fff;">
+                        <tr>
+                            <th style="width:10%">Image</th>
+                            <th style="width:35%;text-align: center;">Name</th>
+                            <th style="width:15%; text-align: center;">Price</th>
+                            <th style="width:10%">Ratings</th>
+                            <th style="width:10%; text-align: center;">Stock</th>
+                            <th style="width: 10%; text-align: center;">Amount Sold</th>
+                            <th style="width:10%; text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(function(product){%>
+
+                            <tr>
+                                <td><img src="/images/products/<%= product.images[0].url %>" width="100%"></td>
+                                <td style="vertical-align: middle;"><%= product.name %></td>
+                                <td style="text-align: center;vertical-align: middle;"><%= product.price %>đ</td>
+                                <td style="text-align: center;vertical-align: middle;"><%= product.ratings %></td>
+                                <td style="text-align: center;vertical-align: middle"><%= product.Stock %></td>
+                                <td style="text-align: center; vertical-align: middle;"><%= product.amountSold %></td>
+                                <td style="vertical-align: middle;text-align: center;">
+                                    <a href="/admin/product/<%= product._id %>" style="color: darkgreen;" class="btn"><i class="bi bi-eye-fill"></i></a>
+                                </td>
+                            </tr>
+
+                        <%}) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <!-- <%- include ("../../partials/footer.ejs") %> -->
+
+</body>
+</html>

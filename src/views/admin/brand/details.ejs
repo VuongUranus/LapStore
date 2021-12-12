@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <%- include ("../../partials/head.ejs") %>
+
+    <title>Admin / Brand Details</title>
+</head>
+<body>
+ 
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+
+    <div class="wrapper wrapper-brandDetails">
+        <h2 class="homeHeading">Brand Details</h2>
+        <form action="/admin/brand/<%= brand._id %>?_method=PUT" method="post">
+
+            <input type="text" name="name" placeholder="Brand's Name" required class="form-control" value="<%= brand.name %>">
+            <br>
+            <textarea name="description" required class="form-control" cols="30" rows="10" placeholder="Brand's Description"><%= brand.description %></textarea>
+            <br>
+            <button class="btn btn-primary form-control" type="submit" onclick="return confirm('Update?')">Submit</button>
+        </form>
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+</body>
+</html>

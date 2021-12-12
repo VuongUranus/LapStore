@@ -10,8 +10,7 @@
  
     <%- include ("../../partials/header.ejs") %>
 
-    <%- include ("../../partials/bubble.ejs") %>
-
+    <%- include ("../../admin/bubble.ejs") %>
     <div class="wrapper">
         <h2 class="homeHeading">Brand List</h2>
         <div class="row">
@@ -20,9 +19,8 @@
                         <thead>
                             <tr>
                                 <th style="width: 25%">Name</th>
-                                <th style="width: 55%">Description</th>
-                                <th style="width: 20%"></th>
-                                <!-- <th style="width: 10%;"></th> -->
+                                <th style="width: 50%">Description</th>
+                                <th style="width: 25%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,6 +31,7 @@
                                     <td><%=brand.description%></td>
                                     <td>
                                         <form action="/admin/brand/<%= brand._id %>?_method=DELETE" method="post">
+                                            <a href="/admin/brand/<%= brand._id %>" class="btn" style="color: darkorange;"><i class="bi bi-scissors"></i></a>
                                             <button class="btn" style="color: darkred;" type="submit" onclick="return confirm('Delete?')"><i class="bi bi-trash-fill"></i></button>
                                         </form>
                                     </td>
@@ -45,9 +44,9 @@
             <div class="col-6">
                 <form action="/admin/brand/new" method="post" style="padding-left: 50px">
                     <h2 class="homeHeading" style="padding: 0; margin: 0 auto 20px; border: none;">Create New Brand</h2>
-                    <input type="text" name="name" placeholder="Name Brand" class="form-control">
+                    <input type="text" name="name" placeholder="Name Brand" class="form-control" required>
                     <br>
-                    <textarea name="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea><br>
+                    <textarea name="description" class="form-control" cols="30" rows="10" placeholder="Description" required></textarea><br>
                     <input type="submit" value="Create" class="btn btn-primary form-control" onclick="return confirm('Create?')">
                 </form>
             </div>

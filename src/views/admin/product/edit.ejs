@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Product Edit</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+    <div class="wrapper" style="padding-bottom: 7vmax">
+        <h2 class="homeHeading">Edit Product</h2>
+        <form action="/admin/product/<%= product._id %>?_method=PUT" enctype="multipart/form-data" method="post"  class="row">
+            <div class="col-6">
+                <img src="/images/products/<%= product.images[0].url %>" width="20%">
+                <input type="file" name="image" accept="image/*" class="btn btn-primary">
+                <br>
+                <label for="">Name: </label>
+                <input type="text" class="form-control" name="name" placeholder="Product Name" required value="<%= product.name %>">
+                <br>
+                <label for="">Brand: </label>
+                <select name="brand" required class="form-control" aria-valuetext="<%= product.brand %>">
+                    <%brands.forEach(function(brand){%>
+                        <%if(brand.name === product.brand){%>
+                            <option value="<%= brand.name %>" selected><%= brand.name %></option>
+                        <%}else{%>
+                            <option value="<%= brand.name %>"><%= brand.name %></option>
+                        <%}%>
+                    <%})%>
+                </select>
+    
+                <br>
+                <label for="">Stock: </label>
+                <input type="number" name="Stock" class="form-control" value="<%= product.Stock %>" placeholder="Stock" required>
+                <br>
+                <label for="">Price(VND): </label>
+                <input type="number" name="price" class="form-control"  value="<%= product.price %>" placeholder="Price" required>
+            </div>
+            <div class="col-6">
+                <label for="">Description: </label>
+                <textarea required name="description" class="form-control" cols="30" rows="10" placeholder="Description"><%= product.description %></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary form-control">Submit</button>
+            </div>
+
+        </form>
+        
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <!-- <%- include ("../../partials/footer.ejs") %> -->
+
+</body>
+</html>

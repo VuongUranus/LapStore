@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Product New</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+
+    <div class="wrapper" style="padding-bottom: 7vmax">
+        <h2 class="homeHeading">Create Product</h2>
+        <form action="/admin/products/new" enctype="multipart/form-data" method="post"  class="row">
+            <div class="col-6">
+                <input type="file" name="image" accept="image/*" class="btn btn-primary" required>
+                <br>
+                <label for="">Name: </label>
+                <input type="text" class="form-control" name="name" placeholder="Product Name" required value="">
+                <br>
+                <label for="">Brand: </label>
+                <select name="brand" required class="form-control">
+                    <%brands.forEach(function(brand){%>
+                        <option value="<%= brand.name %>"><%= brand.name %></option>
+                    <%})%>
+                </select>
+    
+                <br>
+                <label for="">Stock: </label>
+                <input type="number" name="Stock" class="form-control" value="" placeholder="Stock" required>
+                <br>
+                <label for="">Price(VND): </label>
+                <input type="number" name="price" class="form-control"  value="" placeholder="Price" required>
+            </div>
+            <div class="col-6">
+                <label for="">Description: </label>
+                <textarea required name="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary form-control">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <!-- <%- include ("../../partials/footer.ejs") %> -->
+
+</body>
+</html>

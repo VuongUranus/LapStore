@@ -7,7 +7,11 @@ const {
     createOrder,
     getMyOrder,
     getMyOrderDetails,
-    cancelOrder
+    cancelOrder,
+    getAllOrders,
+    getSingleOrder,
+    deleteOrder,
+    updateOrder
 } = require('../controllers/orderController');
 
 router.route('/order/new')
@@ -19,5 +23,14 @@ router.route('/orders/me')
 router.route('/order/:id')
 .get(isAuthenticationUser,getMyOrderDetails)
 .delete(isAuthenticationUser,cancelOrder)
+
+//!ADMIN
+router.route('/admin/orders')
+.get(isAuthenticationUser,authorizeRoles('admin'),getAllOrders);
+
+router.route('/admin/order/:id')
+.get(isAuthenticationUser,authorizeRoles('admin'),getSingleOrder)
+.delete(isAuthenticationUser,authorizeRoles('admin'),deleteOrder)
+.put(isAuthenticationUser,authorizeRoles('admin'),updateOrder);
 
 module.exports = router;

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Reviews</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+    <div class="wrapper">
+         <h2 class="homeHeading">All Reviews</h2>
+        <table class="table">
+            <thead style="background-color: #eb4034; color: #fff;">
+                <tr>
+                    <th style="width:35%;">User</th>
+                    <th style="width:15%; text-align: center;">Rating</th>
+                    <th style="width:50%; text-align: center;">Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reviews.forEach(function(rv){ %>
+                    <tr>
+                        <td><a href="/admin/user/<%= rv.user %>" style="color:#333"><%= rv.name %></a></td>
+                        <td style="text-align: center;"><%= rv.rating %></td>
+                        <td style="text-align: center;"><%= rv.comment %></td>
+                    </tr>
+                <%}) %>
+            </tbody>
+        </table>
+    </div>
+
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

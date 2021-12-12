@@ -36,7 +36,8 @@ exports.createOrder = async(req,res,next)=>{
                 }
                 order.orderItems.push(newOrder);
                 pr.Stock -= cart[i].quantity;
-                pr.save();
+                pr.amountSold += cart[i].quantity;
+                await pr.save({vailidateBeforeSave:false});
             }
         }
 
@@ -72,7 +73,7 @@ exports.getMyOrder = async(req,res,next)=>{
 
     try{
         
-        const orders = await Order.find({user:req.user._id});
+        const orders = await Order.find({user:req.user._id}).sort({createAt:-1});
 
         const message = req.flash('myorderMessage')
         return res.render('user/order/',{message:message,orders:orders});
@@ -120,6 +121,9 @@ exports.cancelOrder = async(req,res,next)=>{
 
         if(order.orderStatus.toLowerCase() === 'processing'){
             await Order.findByIdAndUpdate(req.params.id,{orderStatus: "Canceled"});
+            order.orderItems.forEach(async (ord)=>{
+                await updateStock(ord.product,ord.quantity);
+            });
             return next(new ErrorHander('Order canceled','/orders/me','myorderMessage'));
         }else{
             return res.redirect(`/order/${req.params.id}`);
@@ -132,5 +136,117 @@ exports.cancelOrder = async(req,res,next)=>{
         return next(new ErrorHander(message,'/orders/me','myorderMessage'));
 
     }
+
+}
+
+//!ADMIN
+
+//Get All Order -- Admin
+exports.getAllOrders = async(req,res,next)=>{
+
+    try{
+        const orders = await Order.find().populate("user","name").sort({createAt:-1});
+
+        const message = req.flash('adminOrderMessage');
+        return res.render('admin/order/',{message,orders});
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message));
+    }
+
+}
+
+//Get single Order -- Admin
+exports.getSingleOrder = async(req,res,next)=>{
+
+    try{
+
+        const order = await Order.findById(req.params.id).populate("user","name");
+
+        if(!order){
+            return next(new ErrorHander("Order not found with this Id",'/admin/orders','adminOrderMessage'));
+        }
+    
+        const message = req.flash('adminOrderDetailMessage');
+        res.render('admin/order/details',{message,order});
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/orders','adminOrderMessage'));
+
+    }
+
+}
+
+//Delete Order --Admin
+exports.deleteOrder = async(req,res,next)=>{
+
+    try{
+
+        const order = await Order.findById(req.params.id);
+
+        if(!order){
+            return next(new ErrorHander("Order not found with this Id",'/admin/orders','adminOrderMessage'));
+        }
+
+        await Order.findByIdAndDelete(req.params.id);
+    
+        res.redirect('/admin/orders');
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/orders','adminOrderMessage'));
+
+    }
+
+}
+
+//Update Order -- Admin
+exports.updateOrder = async(req,res,next)=>{
+
+    try{
+
+        const order = await Order.findById(req.params.id);
+
+        if(!order){
+            return next(new ErrorHander("Order cannot find",'/admin/orders','adminOrderMessage'));
+        }
+    
+        if(order.orderStatus === "Delivered" ){
+            return next(new ErrorHander("You have already delivered this order",`/admin/order/${req.params.id}`,'adminOrderDetailMessage'));
+        }
+        if(order.orderStatus === "Canceled" ){
+            return next(new ErrorHander("You have already Canceled this order",`/admin/order/${req.params.id}`,'adminOrderDetailMessage'));
+        }
+    
+        order.orderStatus = req.body.status;
+    
+        if(req.body.status === "Delivered"){
+            order.deliveredAt = Date.now()
+        }
+        await order.save({vailidateBeforeSave:false});
+        res.redirect(`/admin/order/${req.params.id}`);
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/orders','adminOrderMessage'));
+    }
+
+}
+async function updateStock(id,quantity){
+
+    const product = await Product.findById(id);
+
+    if(!product){
+        return next(new ErrorHander('Product cannot found',`/order/${id}`,'myorderMessage'));
+    }
+
+    product.Stock += quantity;
+    product.amountSold -=quantity;
+
+    await product.save({vailidateBeforeSave:false});
 
 }

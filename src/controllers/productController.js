@@ -5,16 +5,20 @@ const typeErrors = require('../utils/typeErrors');
 const ApiFeatures = require('../utils/apifeatures');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const {upload} = require('../utils/upload');
+const multer = require('multer');
 
 
-//Create Product -- Admin
-exports.createProduct = async(req,res,next)=>{
-    const product = await Product.create(req.body);
-    res.status(201).json({
-        success: true,
-        product
-    });
+//Get Home Page
+exports.getHome = async(req,res,next)=>{
+
+    const products = await Product.find().sort({amountSold:-1}).limit(4);
+
+    const message = req.flash('homeMessage');
+    res.render('user/home/index',{message: message,products});
+
 }
+
 
 //Get all Products
 exports.getAllProducts = async(req,res,next)=>{
@@ -128,11 +132,7 @@ exports.getProductsFromCart = async(req,res,next)=>{
 
     try{
 
-        const cart = req.cookies.cart;
-
-        if(!cart){
-            return next(new ErrorHander('Please, add the product to the cart.','/products','productMessage'));
-        }
+        const cart = req.cookies.cart || [];
 
         let products = [];
 
@@ -400,3 +400,231 @@ exports.deleteReview = async(req,res,next)=>{
     }
 
 }
+
+
+//!ADMIN
+
+exports.getAllProductsAdmin = async(req,res,next)=>{
+
+    try{
+
+        const resultPerpage = 4;
+        const productsLength = (await Product.find()).length;
+        const numberPage = Number(req.query.page) || 1;
+        const brand = await Brand.find();
+        
+        const apifeature = new ApiFeatures(Product.find().sort({createAt:-1}),req.query)
+        .search()
+        .filter()
+        .pagination(resultPerpage);
+
+        const product = await apifeature.query;
+
+        const message = req.flash('adminProductMessage');
+        return res.render('admin/product/',{products:product,brands:brand,message:message,productsLength,numberPage});
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message));
+    }
+
+}
+
+exports.deleteProduct = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.params.id);
+
+        if(!product){
+            return next(new ErrorHander("Product not found",'/admin/products','adminProductMessage'));
+        }
+    
+        await product.remove();
+    
+        res.redirect('/admin/products');
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/products','adminProductMessage'));
+    }
+
+}
+exports.getProductDetailAdmin = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.params.id);
+
+        if(!product){
+            return next(new ErrorHander("Product not found","/admin/products","adminProductMessage"));
+        }
+
+        const message = req.flash('adminProductDetailMessage');
+        return res.render('admin/product/details',{product:product,message:message});
+
+    }catch(error){
+
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,"/admin/products","adminProductMessage"));
+
+    }
+
+}
+
+//Get edit product page
+exports.getEditProduct = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.params.id);
+        const brands = await Brand.find();
+        if(!product){
+            return next(new ErrorHander("Product not found","/admin/products","adminProductMessage"));
+        }
+
+        const message = req.flash('adminEditProductMessage');
+        res.render('admin/product/edit.ejs',{message,product,brands});
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/products','adminProductMessage'));
+    }
+
+}
+
+//Update Product
+exports.updateProduct = async(req,res,next)=>{
+
+    try{
+        upload(req, res,async function (err) {
+
+            if(!req.file){
+                const newData = {
+                    name: req.body.name,
+                    description:req.body.description,
+                    Stock: req.body.Stock,
+                    price: req.body.price,
+                    brand: req.body.brand
+                }
+
+                await Product.findByIdAndUpdate(req.params.id,newData,{
+                    new: true,
+                    runValidators: true,
+                    useFindAndModify:false
+                });
+                res.redirect(`/admin/product/${req.params.id}`);
+
+            }else{
+                if (err instanceof multer.MulterError) {
+                    return next(new ErrorHander("A Multer error occurred when uploading.",`/admin/product/edit/${req.params.id}`,'adminEditProductMessage')); 
+                } else if (err) {
+                    return next(new ErrorHander(`An unknown error occurred when uploading.${err}`,`/admin/product/edit/${req.params.id}`,'adminEditProductMessage'));
+                }else{
+                    const newData = {
+                        name: req.body.name,
+                        description:req.body.description,
+                        Stock: req.body.Stock,
+                        price: req.body.price,
+                        brand: req.body.brand,
+                        images: {
+                            url: req.file.filename
+                        }
+                    }
+                    await Product.findByIdAndUpdate(req.params.id,newData,{
+                        new: true,
+                        runValidators: true,
+                        useFindAndModify:false
+                    });
+                    res.redirect(`/admin/product/${req.params.id}`);
+                    // res.send(req.file);
+                }
+            }
+        })
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,`/admin/product/edit/${req.params.id}`,'adminEditProductMessage'));
+    }
+
+}
+
+//Get create product page
+exports.getAddProduct = async(req,res,next)=>{
+
+    const brands = await Brand.find();
+
+    const message = req.flash('adminNewProductMessage');
+    return res.render('admin/product/new',{message:message,brands});
+}
+
+//Create Product
+exports.createProduct = async(req,res,next)=>{
+
+    try{
+
+        upload(req, res,async function (err) {
+
+            if(!req.file){
+                return next(new ErrorHander('An image is required','/admin/products/new','adminNewProductMessage'));
+
+            }else{
+                if (err instanceof multer.MulterError) {
+                    return next(new ErrorHander("A Multer error occurred when uploading.",'/admin/products/new','adminNewProductMessage')); 
+                } else if (err) {
+                    return next(new ErrorHander(`An unknown error occurred when uploading.${err}`,'/admin/products/new','adminNewProductMessage'));
+                }else{
+                    const newData = {
+                        name: req.body.name,
+                        description:req.body.description,
+                        Stock: req.body.Stock,
+                        price: req.body.price,
+                        brand: req.body.brand,
+                        images: {
+                            url: req.file.filename
+                        }
+                    }
+                    const product = await Product.create(newData);
+                    res.redirect(`/admin/product/${product._id}`);
+                }
+            }
+        })
+
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,'/admin/products/new','adminNewProductMessage'));
+    }
+
+}
+
+
+//Get all review of a product
+exports.getProductReview = async(req,res,next)=>{
+
+    try{
+
+        const product = await Product.findById(req.query.id);
+        if(!product){
+            return next(new ErrorHander("Product not found",`/admin/product/${req.query.id}`,'adminProductDetailMessage'));
+        }
+
+        const message = req.flash('adminReviewMessage');
+        res.render('admin/product/review',{message,reviews: product.reviews.reverse()});
+        
+    }catch(error){
+        const message = typeErrors(error);
+        return next(new ErrorHander(message,`/admin/product/${req.query.id}`,'adminProductDetailMessage'));
+    }
+
+}
+
+//Report Top Sell
+exports.topSell = async(req,res,next)=>{
+
+    const products = await Product.find().sort({amountSold:-1});
+
+    const message = req.flash('topSellMessage');
+    return res.render('admin/report/',{message,products});
+
+}
+
+

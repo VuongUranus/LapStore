@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head.ejs") %>
+    <title>Admin / Orders</title>
+</head>
+<body>
+    
+    <%- include ("../../partials/header.ejs") %>
+
+    <%- include ("../../admin/bubble.ejs") %>
+    <div class="wrapper-myorder">
+         <h2 class="homeHeading">All Orders</h2>
+         <table class="table">
+             <thead>
+                 <tr>
+                     <th style="width: 10%">Action</th>
+                     <th style="width: 15%">Date</th>
+                     <th style="width:25%">User</th>
+                     <th style="width: 30%">Products</th>
+                     <th style="width: 10%">Total</th>
+                     <th style="width: 10%">Status</th>
+                 </tr>
+             </thead>
+             <tbody>
+                <% orders.forEach(function(order){%>
+                    <tr>
+                        <td>
+                            <a style="color: darkgreen;" class="btn" href="/admin/order/<%= order._id %>"><i class="bi bi-eye-fill"></i></a>
+                            <form style="display: inline;" action="/admin/order/<%= order._id %>?_method=DELETE" method="post">
+                                <button style="color: darkred;" class="btn" type="submit" onclick="return confirm('Delete?')"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </td>
+                        <td ><p><%= order.createAt.toDateString() %></p></td>
+                        <td><p><%= order.user.name %></p></td>
+                        <td ><div>
+                            <% order.orderItems.forEach(function(item){%>
+                                <p><%= item.name %></p>
+                            <%}) %>
+                        </div></td>
+                        <td><p><%= order.totalPrice %>đ</p></td>
+                        <td><p><%= order.orderStatus %></p></td>
+                    </tr>
+                <%}) %>
+             </tbody>
+         </table>
+    </div>
+
+
+    <%- include ("../../partials/message.ejs")  %>
+
+    <%- include ("../../partials/footer.ejs") %>
+
+</body>
+</html>

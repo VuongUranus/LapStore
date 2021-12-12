@@ -22,22 +22,24 @@
                 </div>
             </form>
             <div class="price-Range">
-                <a href="?price[gt]=0&price[lt]=20000000">Dưới 20tr</a>
-                <a href="?price[gt]=20000000&price[lt]=25000000">Từ 20-25tr</a>
-                <a href="?price[gt]=25000000&price[lt]=35000000">Từ 25-35tr</a>
-                <a href="?price[gt]=35000000&price[lt]=1000000000">Trên 35tr</a>
+                <a href="?price[gt]=0&price[lt]=20000000">Bellow 20M</a>
+                <a href="?price[gt]=20000000&price[lt]=25000000">20M - 25M</a>
+                <a href="?price[gt]=25000000&price[lt]=35000000">25M-35M</a>
+                <a href="?price[gt]=35000000&price[lt]=1000000000">Over 35M</a>
             </div>
             <div class="brand-radio">
                 <% brands.forEach(function(brand){ %>
                     <a href="?brand=<%= brand.name %>"><%= brand.name %></a>
                 <% }) %>
             </div>
+            <br>
+            <a href="/products" class="btn btn-primary">All Product</a>
         </div>
             <div class="col">
             <div class="products">
                 <% products.forEach(function(product){ %>
                     <a href="/product/<%=product._id%>" class="productCard" >
-                        <img src= <%= product.images[0].url%> alt="">
+                        <img src="/images/products/<%= product.images[0].url %>" alt="">
                         <p><%=product.name%></p>
                         <div class="rating">
                             <span>

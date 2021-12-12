@@ -33,16 +33,16 @@ const product = require('./routes/productRoutes');
 const order = require('./routes/orderRoutes');
 const brand = require('./routes/brandRoutes');
 
-app.get('/',(req,res)=>{
-    const message = req.flash('homeMessage');
-    res.render('user/home/index',{message: message});
-});
 app.post('/checkLogin',(req,res)=>{
     if(req.cookies.token){
         return res.send(true);
     }
     return res.send(false);
 });
+
+app.get('/admin',(req,res)=>{
+    res.redirect('/admin/products');
+})
 
 app.use('/',user);
 app.use('/',product);

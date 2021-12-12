@@ -25,7 +25,7 @@
                 <% products.forEach(function(product){ %>
                     <tr>
                         <td class="product">
-                            <img src=<%= product.images[0].url %>>
+                            <img src="/images/products/<%= product.images[0].url %>" %>>
                             <div>
                                 <a href="/product/<%= product._id %>"><%= product.name %></a>
                                 <p class="price">Price: <strong style="font-weight: 400;"><%= product.price %></strong></p>
