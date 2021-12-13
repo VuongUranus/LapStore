@@ -34,7 +34,7 @@ exports.deleteBrand = async(req,res,next)=>{
 
         await Brand.findByIdAndDelete(req.params.id);
 
-        res.redirect('/admin/brands');
+        return next(new ErrorHander('Brand removed','/admin/brands','adminBrandMessage'));
 
     }catch(error){
         const message = typeErrors(error);
@@ -66,7 +66,7 @@ exports.updateBrand = async(req,res,next)=>{
             runValidators:true,
             useFindAndModify: false,
         });
-        res.redirect('/admin/brands');
+        return next(new ErrorHander('Brand Updated','/admin/brands','adminBrandMessage'));
 
     }catch(error){
         const message = typeErrors(error);
@@ -84,7 +84,7 @@ exports.createBrand = async(req,res,next)=>{
        }
 
        await Brand.create(brand);
-       res.redirect('/admin/brands');
+       return next(new ErrorHander('Brand Created','/admin/brands','adminBrandMessage'));
 
     }catch(error){
         const message = typeErrors(error);

@@ -35,7 +35,7 @@ $(document).ready(()=>{
     //Message effect
     setTimeout(()=>{
         $(".message-wrapper").css("transform","scale(0)");
-    },5000);
+    },2000);
 
     //Scroll to
     $("p button.scroll").click(()=>{
@@ -127,7 +127,16 @@ $(document).ready(()=>{
 
     });
 
-
-    //!Admin
     
 });
+
+// window.addEventListener( "pageshow", function ( event ) {
+//     var historyTraversal = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
+//     if ( historyTraversal ) {
+//       // Handle page restore.
+//       window.location.reload(true);
+//     }
+//   });
+if(performance.navigation.type == 2){
+    location.reload(true);
+ }

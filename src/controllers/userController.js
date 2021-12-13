@@ -1,8 +1,9 @@
 const User = require('../models/userModel');
+const Order = require('../models/orderModel');
 const ErrorHander = require('../utils/errorHander');
 const sendToken = require('../utils/jwtToken');
 const typeErrors = require('../utils/typeErrors');
-const jwt = require('jsonwebtoken');
+
 
 //Register a User
 exports.registerUser =  async (req,res,next)=>{
@@ -65,7 +66,7 @@ exports.logout = async (req,res,next)=>{
             httpOnly: true,
         });
     
-        res.redirect('/login'); 
+       return next(new ErrorHander('logged out')); 
     
     } catch (error) {
         next(new ErrorHander(error.message));
@@ -214,7 +215,7 @@ exports.updateUser = async(req,res,next)=>{
             useFindAndModify: false,
         });
     
-        res.redirect(`/admin/user/${req.params.id}`);
+        next(new ErrorHander('User Updated',`/admin/user/${req.params.id}`,'adminUserDetailMessage'));
 
     } catch (error) {
         const message = typeErrors(error);
@@ -235,12 +236,19 @@ exports.deleteUser = async (req,res,next)=>{
         }
     
         await user.remove();
+        const orders = await Order.find({user: req.params.id});
+        orders.forEach( async (order) => {
+            if(order.paymentStatus !== "Delivered"){
+                order.orderStatus = "Canceled";
+                order.save();
+            }
+        });
     
-        res.redirect('/admin/users');
+        next(new ErrorHander('User Removed',`/admin/users`,'adminUserMessage'));
 
     } catch (error) {
         const message = typeErrors(error);
-        next(new ErrorHander(message));
+        next(new ErrorHander(message,`/admin/user/${req.params.id}`,'adminUserDetailMessage'));
     }
 
 };

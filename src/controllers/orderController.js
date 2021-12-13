@@ -193,7 +193,7 @@ exports.deleteOrder = async(req,res,next)=>{
 
         await Order.findByIdAndDelete(req.params.id);
     
-        res.redirect('/admin/orders');
+        return next(new ErrorHander('Order Removed','/admin/orders','adminOrderMessage'));
 
     }catch(error){
 
@@ -225,14 +225,15 @@ exports.updateOrder = async(req,res,next)=>{
         order.orderStatus = req.body.status;
     
         if(req.body.status === "Delivered"){
-            order.deliveredAt = Date.now()
+            order.deliveredAt = Date.now();
+            order.paymentInfo.status = "Paid";
         }
         await order.save({vailidateBeforeSave:false});
-        res.redirect(`/admin/order/${req.params.id}`);
+        return next(new ErrorHander('Order Updated',`/admin/order/${req.params.id}`,'adminOrderDetailMessage'));
 
     }catch(error){
         const message = typeErrors(error);
-        return next(new ErrorHander(message,'/admin/orders','adminOrderMessage'));
+        return next(new ErrorHander(message,`/admin/order/${req.params.id}`,'adminOrderDetailMessage'));
     }
 
 }

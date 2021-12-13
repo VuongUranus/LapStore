@@ -32,7 +32,15 @@
                             </form>
                         </td>
                         <td ><p><%= order.createAt.toDateString() %></p></td>
-                        <td><p><%= order.user.name %></p></td>
+                        <td>
+                            <%if(order.user){%>
+                                <a href="/admin/user/<%= order.user._id %>">
+                                    <%= order.user.name %>
+                                </a>
+                            <%}else{%>
+                               <p>User has been deleted</p> 
+                            <%}%>
+                            </td>
                         <td ><div>
                             <% order.orderItems.forEach(function(item){%>
                                 <p><%= item.name %></p>

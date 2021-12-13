@@ -172,7 +172,7 @@ exports.deleteProductFromCart = async(req,res,next)=>{
             return res.cookie("cart",null,{
                 expires: new Date(Date.now()),
                 httpOnly: true, 
-            }).redirect('/products');
+            }).redirect('/cart');
         }
 
         //Options for cookie
@@ -358,7 +358,7 @@ exports.createProductReview = async(req,res,next)=>{
         
         await product.save({validateBeforeSave:false});
     
-        return res.redirect(`/product/${req.body.productId}`);
+        return next(new ErrorHander('Review Added',`/product/${req.body.productId}`,'productDetailMessage'));
 
     }catch(error){
 
@@ -442,7 +442,7 @@ exports.deleteProduct = async(req,res,next)=>{
     
         await product.remove();
     
-        res.redirect('/admin/products');
+        return next(new ErrorHander('Product Deleted','/admin/products','adminProductMessage'));
 
     }catch(error){
         const message = typeErrors(error);
@@ -517,9 +517,11 @@ exports.updateProduct = async(req,res,next)=>{
 
             }else{
                 if (err instanceof multer.MulterError) {
-                    return next(new ErrorHander("A Multer error occurred when uploading.",`/admin/product/edit/${req.params.id}`,'adminEditProductMessage')); 
+                    req.flash('adminEditProductMessage','A Multer error occurred when uploading.')
+                    return res.redirect(`/admin/product/edit/${req.params.id}`);  
                 } else if (err) {
-                    return next(new ErrorHander(`An unknown error occurred when uploading.${err}`,`/admin/product/edit/${req.params.id}`,'adminEditProductMessage'));
+                    req.flash('adminEditProductMessage',`An unknown error occurred when uploading.${err}`);
+                    return res.redirect(`/admin/product/edit/${req.params.id}`);
                 }else{
                     const newData = {
                         name: req.body.name,
@@ -569,9 +571,11 @@ exports.createProduct = async(req,res,next)=>{
 
             }else{
                 if (err instanceof multer.MulterError) {
-                    return next(new ErrorHander("A Multer error occurred when uploading.",'/admin/products/new','adminNewProductMessage')); 
+                    req.flash('adminNewProductMessage','A Multer error occurred when uploading.')
+                    return res.redirect('/admin/products/new'); 
                 } else if (err) {
-                    return next(new ErrorHander(`An unknown error occurred when uploading.${err}`,'/admin/products/new','adminNewProductMessage'));
+                    req.flash('adminNewProductMessage',`An unknown error occurred when uploading.${err}`);
+                    return res.redirect('/admin/products/new'); 
                 }else{
                     const newData = {
                         name: req.body.name,
@@ -584,6 +588,7 @@ exports.createProduct = async(req,res,next)=>{
                         }
                     }
                     const product = await Product.create(newData);
+                    req.flash('adminProductDetailMessage','Product Added');
                     res.redirect(`/admin/product/${product._id}`);
                 }
             }
