@@ -32,7 +32,7 @@
                     <div class="cart-item">
                         <img src="/images/products/<%= product.images[0].url %>">
                         <a href="/product/<%= product._id %>"><%= product.name %></a>
-                        <p><%=product.quantity +" x "+ product.price %> = <strong><%= product.quantity * product.price %>đ</strong></p>
+                        <p><%=product.quantity +" x "+ (product.price+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %> = <strong><%= ((product.quantity * product.price)+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</strong></p>
                     </div>
 
                 <%}) %>
@@ -44,7 +44,7 @@
                 <div class="flex">
                     <input type="hidden" name="total" value="<%= subtotal %>">
                     <p>Subtotal:</p>
-                    <p><%= subtotal %>đ</p>
+                    <p><%= (subtotal+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</p>
                 </div>
                 <div class="flex">
                     <p>Shipping Charges:</p>
@@ -53,7 +53,7 @@
                 <hr>
                 <div class="flex">
                     <p>Total:</p>
-                    <p><%= subtotal %>đ</p>
+                    <p><%= (subtotal+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</p>
                 </div>
                 <h1 style="margin-top: 40px;">Payment Method</h1>
                 <div class="paymethod">

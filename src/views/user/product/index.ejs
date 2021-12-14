@@ -61,7 +61,7 @@
                                 <%= product.numOfReviews %> Reviews
                             </span>
                         </div>
-                        <span><%= product.price %>đ</span>
+                        <span><%= (product.price+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</span>
                     </a>
                 <% }) %>
             </div>

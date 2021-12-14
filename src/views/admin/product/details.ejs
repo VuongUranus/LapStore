@@ -45,7 +45,7 @@
                 <span>(<%= product.numOfReviews %> review)</span>
                 <a href="/admin/reviews?id=<%= product._id %>" class="btn btn-primary">Get Reviews</a>
                 <hr>
-                <h4>Price: <%= product.price %>đ</h4>
+                <h4>Price: <%= (product.price+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</h4>
                 <hr>
                 <h4>Brand: <%= product.brand %></h4>
                 <hr>

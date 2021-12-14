@@ -53,8 +53,8 @@
                             <tr>
                                 <td><img src="/images/products/<%= product.images[0].url %>" width="100%"></td>
                                 <td style="vertical-align: middle;"><%= product.name %></td>
-                                <td style="text-align: center;vertical-align: middle;"><%= product.price %>đ</td>
-                                <td style="text-align: center;vertical-align: middle;"><%= product.ratings %></td>
+                                <td style="text-align: center;vertical-align: middle;"><%= (product.price+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</td>
+                                <td style="text-align: center;vertical-align: middle;"><%= product.ratings.toFixed(1) %></td>
                                 <td style="text-align: center;vertical-align: middle"><%= product.Stock %></td>
                                 <td style="vertical-align: middle;text-align: center;">
                                     <a href="/admin/product/<%= product._id %>" style="color: darkgreen;" class="btn"><i class="bi bi-eye-fill"></i></a>

@@ -68,7 +68,7 @@ $(document).ready(()=>{
         $(".wrapper-cart td.subtotal").each((index,value)=>{
             grossTotal += Number($(value).text());
         })
-        $(".wrapper-cart .grossTotal").html(grossTotal);
+        $(".wrapper-cart .grossTotal").html((grossTotal+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',')+"đ");
     }
 
     grossTotal();

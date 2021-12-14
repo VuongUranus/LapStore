@@ -46,7 +46,7 @@
                                 <p><%= item.name %></p>
                             <%}) %>
                         </div></td>
-                        <td><p><%= order.totalPrice %>đ</p></td>
+                        <td><p><%= (order.totalPrice+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</p></td>
                         <td><p><%= order.orderStatus %></p></td>
                     </tr>
                 <%}) %>

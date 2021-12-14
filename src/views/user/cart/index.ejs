@@ -27,7 +27,7 @@
                             <img src="/images/products/<%= product.images[0].url %>" %>>
                             <div>
                                 <a href="/product/<%= product._id %>"><%= product.name %></a>
-                                <p class="price">Price: <strong style="font-weight: 400;"><%= product.price %></strong></p>
+                                <p class="price">Price: <strong style="font-weight: 400;"><%= (product.price+"").replace(/\B(?=(\d{3})+(?!\d))/g, ',') %>đ</strong></p>
                                 <form action="/cart/<%= product._id %>?_method=DELETE" method="post">
                                     <button type="submit" class="btn-link">Remove</button>
                                 </form>

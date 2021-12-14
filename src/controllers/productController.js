@@ -115,7 +115,8 @@ exports.addProductToCart = async(req,res,next)=>{
             ),
             httpOnly: true,
         }
-        return res.cookie('cart',Cart,options).redirect('/cart');
+        req.flash('productDetailMessage','Added to cart')
+        return res.cookie('cart',Cart,options).redirect(`/product/${req.body.product}`);
 
 
     }catch(error){
